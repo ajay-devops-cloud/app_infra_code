@@ -14,7 +14,7 @@ data "azurerm_key_vault_secret" "password" {
 }
 
 
-resource "azurerm_sql_server" "sqlserver" {
+resource "azurerm_mssql_server" "sqlserver" {
   name                         = var.sql_server_name
   resource_group_name          = var.resource_group_name
   location                     = var.location
@@ -23,9 +23,9 @@ resource "azurerm_sql_server" "sqlserver" {
   administrator_login_password = data.azurerm_key_vault_secret.password.value
 
 }
-resource "azurerm_sql_database" "database" {
+resource "azurerm_mssql_database" "database" {
  name         = var.sql_database_name
-  server_id = azurerm_sql_server.sqlserver.id
+  server_id = azurerm_mssql_server.sqlserver.id
   collation    = "SQL_Latin1_General_CP1_CI_AS"
   license_type = "LicenseIncluded"
   max_size_gb  = 2
