@@ -31,7 +31,7 @@ module "vm" {
     depends_on = [ module.subnet ]
     source = "../../Module/azurerm_vm"
   nic_name = "mynic"
-  location = "eastus"
+  location = "eastus 2"
   resource_group_name = "app-dev-rg"
   virtual_machene_name = "devta"
   subnet_name = "appsubnet"
@@ -47,6 +47,6 @@ module "bd" {
   source = "../../Module/azurerm_DB"
   sql_server_name = "mysql-ajay-01"
   resource_group_name = "app-dev-rg"
-  location = "eastus"
+  location = "eastus 2"
   sql_database_name = "mydb"
 }
