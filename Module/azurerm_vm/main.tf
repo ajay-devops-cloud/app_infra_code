@@ -41,7 +41,7 @@ resource "azurerm_linux_virtual_machine" "vm" {
   name                = var.virtual_machene_name
   resource_group_name = var.resource_group_name
   location            = var.location
-  size                = "Standard_F2"
+  size                = "Standard_B1s"
   admin_username      = data.azurerm_key_vault_secret.vmusername.value
   admin_password = data.azurerm_key_vault_secret.vmpassword.value
   network_interface_ids = [
