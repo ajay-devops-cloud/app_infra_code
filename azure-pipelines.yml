@@ -1,6 +1,6 @@
 trigger: none
 
-pool: apna-agent
+pool: apna-agent-pool
 
 steps:
 - task: TerraformTask@5
