@@ -1,69 +1,64 @@
 trigger: none
 
-
-
 variables:
-  configuepath: '$(System.DefaultWorkingDirectory)/environment/dev'
+  configpath: "$(System.DefaultWorkingDirectory)/Nested map/Parent Module"
 
 stages:
-
-- stage: Terraform_Init
-  displayName: "Terraform Initialization"
-  jobs:
-    - job: init
-      pool: apna-agent-pool
-      steps:
-        - task: TerraformTask@5
-          inputs:
-            provider: 'azurerm'
-            command: 'init'
-            workingDirectory: '$(configuepath)'
-            backendServiceArm: 'next-level-service-connection'
-            backendAzureRmStorageAccountName: 'itsolution'
-            backendAzureRmContainerName: 'nextlevelcontainer'
-            backendAzureRmKey: 'itit.tfstate'
-
-
-- stage: Terraform_Plan
+# ---------- Terraform Plan ----------
+- stage: TerraformPlan
   displayName: "Terraform Plan"
-  dependsOn: Terraform_Init
   jobs:
-    - job: plan
-      pool: apna-agent-pool
-      steps:
-        - task: TerraformTask@5
-          inputs:
-            provider: 'azurerm'
-            command: 'plan'
-            workingDirectory: '$(configuepath)'
-            environmentServiceNameAzureRM: 'next-level-service-connection'
+  - job: plan
+    displayName: "Run Terraform Plan"
+    pool: apna-agent-pool
+      
+    steps:
+    - task: TerraformTaskV4@4
+      displayName: "Terraform Init"
+      inputs:
+        provider: 'azurerm'
+        command: 'init'
+        workingDirectory: $(configpath)
 
+    - task: TerraformTaskV4@4
+      displayName: "Terraform Plan"
+      inputs:
+        provider: 'azurerm'
+        command: 'plan'
+        workingDirectory: $(configpath)
+        environmentServiceNameAzureRM: 'next-level-service-connection'
 
-- stage: Manual_Approval
-  displayName: "Approval before Apply"
-  dependsOn: Terraform_Plan
+# ---------- Manual Approval ----------
+- stage: Approval
+  displayName: "Approval Before Apply"
+  dependsOn: TerraformPlan
   jobs:
-    - job: approval
-      displayName: "Manual Approval (Server Job)"
-      pool: server
-      steps:
-        - task: ManualValidation@1
-          inputs:
-            notifyUsers: 'ajaykumaryadav97@gmail.com'
-            approvers: 'ajaykumaryadav97@gmail.com'
-            instructions: 'Location changed — please approve.'
+  - job: waitForApproval
+    displayName: "Manual Approval Required"
+    pool: server
+    timeoutInMinutes: 120  # 2 ghante me approve karna hoga
+    steps:
+    - task: ManualValidation@1
+      inputs:
+        instructions: |
+          ✅ Terraform plan output check karo.
+          ❌ Agar kuch galat ho to reject karo.
+        onTimeout: 'reject'
 
-# ---------- Stage 4: Terraform Apply ----------
-- stage: Terraform_Apply
+# ---------- Terraform Apply ----------
+- stage: TerraformApply
   displayName: "Terraform Apply"
-  dependsOn: Manual_Approval
+  dependsOn: Approval
   jobs:
-    - job: apply
-      pool: apna-agent-pool
-      steps:
-        - task: TerraformTask@5
-          inputs:
-            provider: 'azurerm'
-            command: 'apply'
-            workingDirectory: '$(configuepath)'
-            environmentServiceNameAzureRM: 'next-level-service-connection'
+  - job: apply
+    displayName: "Run Terraform Apply"
+    pool: apna-agent-pool
+     
+    steps:
+    - task: TerraformTaskV4@4
+      displayName: "Terraform Apply"
+      inputs:
+        provider: 'azurerm'
+        command: 'apply'
+        workingDirectory: $(configpath)
+        environmentServiceNameAzureRM: 'next-level-service-connection'
