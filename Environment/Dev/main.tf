@@ -1,14 +1,14 @@
 module "rg" {
   source = "../../Module/azurerm_resource_group"
   resource_group_name = "app-dev-rg"
-  location = "eastus"
+  location = "central india"
 }
 module "vnet" {
     depends_on = [ module.rg ]
   source = "../../Module/azurerm_vnet"
   virtual_network_name = "appvnet"
   address_space = ["10.0.0.0/16"]
-  location = "eastus"
+  location = "central india"
   resource_group_name = "app-dev-rg"
 }
 module "subnet" {
@@ -24,14 +24,14 @@ module "publicip" {
   source = "../../Module/azurerm_publickip"
   publicip_name = "mypublicip"
   resource_group_name = "app-dev-rg"
-  location = "eastus"
+  location = "central india"
 
 }
 module "vm" {
     depends_on = [ module.subnet ]
     source = "../../Module/azurerm_vm"
   nic_name = "mynic"
-  location = "eastus"
+  location = "central india"
   resource_group_name = "app-dev-rg"
   virtual_machene_name = "devta"
   subnet_name = "appsubnet"
@@ -47,6 +47,6 @@ module "bd" {
   source = "../../Module/azurerm_DB"
   sql_server_name = "mysql"
   resource_group_name = "app-dev-rg"
-  location = "eastus"
+  location = "central india"
   sql_database_name = "mydb"
 }
