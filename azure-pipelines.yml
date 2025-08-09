@@ -15,6 +15,7 @@ stages:
             provider: 'azurerm'
             command: 'init'
             workingDirectory: '$(configuepath)'
+            backendAzureRmResourceGroupName: 'rg-it'
             backendServiceArm: 'next-level-service-connection'
             backendAzureRmStorageAccountName: 'itsolution'
             backendAzureRmContainerName: 'nextlevelcontainer'
