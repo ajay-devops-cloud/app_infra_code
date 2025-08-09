@@ -19,6 +19,14 @@ module "subnet" {
   virtual_network_name = "appvnet"
   address_prefixes = ["10.0.0.0/24"]
 }
+  module "subnetinfra" {
+    depends_on = [ module.vnet ]
+  source = "../../Module/azurerm_subnet"
+  subnet_name = "infrasubnet"
+  resource_group_name = "app-dev-rg"
+  virtual_network_name = "appvnet"
+  address_prefixes = ["10.0.1.0/24"]
+}
 module "publicip" {
     depends_on = [ module.rg ]
   source = "../../Module/azurerm_publickip"
