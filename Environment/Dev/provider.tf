@@ -1,6 +1,6 @@
 terraform {
   backend "azurerm" {
-    resource_group_name = "rg-ajay"
+    resource_group_name = "rg-it"
     storage_account_name = "itsolution"
     container_name = "nextlevelcontainer"
     key = "itit.tfstate"
