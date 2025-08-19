@@ -48,10 +48,20 @@ stages:
   jobs: 
     - job: terraform_destroy
       steps:
-      - task: TerraformTask@5
+      - task: TerraformTaskV4@4
+        inputs:
+          provider: 'azurerm'
+          command: 'init'
+          workingDirectory: '$(System.DefaultWorkingDirectory)/environment/dev'
+          backendAzureRmResourceGroupName: 'rg-it'
+          backendServiceArm: 'next-level-service-connection'
+          backendAzureRmStorageAccountName: 'itsolution'
+          backendAzureRmContainerName: 'nextlevelcontainer'
+          backendAzureRmKey: 'itit.tfstate'
+
+      - task: TerraformTaskV4@4
         inputs:
           provider: 'azurerm'
           command: 'destroy'
           workingDirectory: '$(System.DefaultWorkingDirectory)/environment/dev'
           environmentServiceNameAzureRM: 'next-level-service-connection'
-  
