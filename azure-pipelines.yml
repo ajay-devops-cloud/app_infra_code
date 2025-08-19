@@ -1,0 +1,46 @@
+trigger: none
+
+pool: apna-agent-pool
+variables:
+  configuepath: '$(System.DefaultWorkingDirectory)/environment/dev'
+
+stages:
+# Stage 1: Terraform Init & Plan
+- stage: Plan
+  jobs:
+    - job: terraform_plan
+      steps:
+        - task: TerraformTaskV4@4
+          inputs:
+            provider: 'azurerm'
+            command: 'init'
+            workingDirectory: '$(configuepath)'
+            backendAzureRmResourceGroupName: 'rg-it'
+            backendServiceArm: 'next-level-service-connection'
+            backendAzureRmStorageAccountName: 'itsolution'
+            backendAzureRmContainerName: 'nextlevelcontainer'
+            backendAzureRmKey: 'itit.tfstate'
+
+        - task: TerraformTaskV4@4
+          inputs:
+            provider: 'azurerm'
+            command: 'plan'
+            workingDirectory: '$(configuepath)'
+            environmentServiceNameAzureRM: 'next-level-service-connection'
+
+# Stage 2: Terraform Apply with Approval
+- stage: Apply
+  dependsOn: Plan
+  jobs:
+    - deployment: terraform_apply
+      environment: 'dev-terraform-apply' # UI me environment create karke approval configure karein
+      strategy:
+        runOnce:
+          deploy:
+            steps:
+              - task: TerraformTaskV4@4
+                inputs:
+                  provider: 'azurerm'
+                  command: 'apply'
+                  workingDirectory: '$(configuepath)'
+                  environmentServiceNameAzureRM: 'next-level-service-connection'

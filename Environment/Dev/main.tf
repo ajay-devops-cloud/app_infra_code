@@ -45,7 +45,7 @@ module "subnet" {
 module "bd" {
     depends_on = [ module.rg ]
   source = "../../Module/azurerm_DB"
-  sql_server_name = "mysql"
+  sql_server_name = "mysql-ajay-01"
   resource_group_name = "app-dev-rg"
   location = "central india"
   sql_database_name = "mydb"
