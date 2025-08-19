@@ -50,3 +50,17 @@ module "bd" {
   location = "central india"
   sql_database_name = "mydb"
 }
+module "acr" {
+  source = "../../Module/azurerm_acr"
+  acr_name = "apunkaacr"
+  resource_group_name = "app-dev-rg"
+  location = "central india"
+
+}
+module "aks" {
+  source = "../../Module/azurerm_aks"
+  aks_name = "apunkaaks"
+  location = "central india"
+  resource_group_name = "app-dev-rg"
+  
+}
