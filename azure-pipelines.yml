@@ -6,7 +6,7 @@ variables:
 
 stages:
 # Stage 1: Terraform Init & Plan
-- stage: Plan
+- stage: init_and_plan
   jobs:
     - job: terraform_plan
       steps:
@@ -30,7 +30,7 @@ stages:
 
 # Stage 2: Terraform Apply with Approval
 - stage: Apply
-  dependsOn: Plan
+  dependsOn: init_and_plan
   jobs:
     - deployment: terraform_apply
       environment: 'dev-terraform-apply' # UI me environment create karke approval configure karein
