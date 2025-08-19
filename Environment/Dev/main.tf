@@ -27,21 +27,21 @@ module "publicip" {
   location = "central india"
 
 }
-module "vm" {
-    depends_on = [ module.subnet ]
-    source = "../../Module/azurerm_vm"
-  nic_name = "mynic"
-  location = "central india"
-  resource_group_name = "app-dev-rg"
-  virtual_machene_name = "devta"
-  subnet_name = "appsubnet"
-  virtual_network_name = "appvnet"
-  publicip_name = "mypublicip"
-  publisher = "Canonical"
-   offer     = "0001-com-ubuntu-server-jammy"
-    sku       = "22_04-lts"
-    image_version = "latest"
-}
+# module "vm" {
+#     depends_on = [ module.subnet ]
+#     source = "../../Module/azurerm_vm"
+#   nic_name = "mynic"
+#   location = "central india"
+#   resource_group_name = "app-dev-rg"
+#   virtual_machene_name = "devta"
+#   subnet_name = "appsubnet"
+#   virtual_network_name = "appvnet"
+#   publicip_name = "mypublicip"
+#   publisher = "Canonical"
+#    offer     = "0001-com-ubuntu-server-jammy"
+#     sku       = "22_04-lts"
+#     image_version = "latest"
+# }
 module "bd" {
     depends_on = [ module.rg ]
   source = "../../Module/azurerm_DB"
