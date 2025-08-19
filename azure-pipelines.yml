@@ -44,3 +44,14 @@ stages:
                   command: 'apply'
                   workingDirectory: '$(configuepath)'
                   environmentServiceNameAzureRM: 'next-level-service-connection'
+- stage: destroy
+  jobs: 
+    - job: terraform_destroy
+      steps:
+      - task: TerraformTask@5
+        inputs:
+          provider: 'azurerm'
+          command: 'destroy'
+          workingDirectory: '$(System.DefaultWorkingDirectory)/environment/dev'
+          environmentServiceNameAzureRM: 'next-level-service-connection'
+  
