@@ -19,14 +19,14 @@ module "subnet" {
   virtual_network_name = "appvnet"
   address_prefixes = ["10.0.0.0/24"]
 }
-module "publicip" {
-    depends_on = [ module.rg ]
-  source = "../../Module/azurerm_publickip"
-  publicip_name = "mypublicip"
-  resource_group_name = "app-dev-rg"
-  location = "central india"
+# module "publicip" {
+#     depends_on = [ module.rg ]
+#   source = "../../Module/azurerm_publickip"
+#   publicip_name = "mypublicip"
+#   resource_group_name = "app-dev-rg"
+#   location = "central india"
 
-}
+# }
 # module "vm" {
 #     depends_on = [ module.subnet ]
 #     source = "../../Module/azurerm_vm"
@@ -50,15 +50,16 @@ module "bd" {
   location = "central india"
   sql_database_name = "mydb"
 }
-module "acr" {
-  source = "../../Module/azurerm_acr"
-  acr_name = "apunkaacr"
-  resource_group_name = "app-dev-rg"
-  location = "central india"
+# module "acr" {
+#   source = "../../Module/azurerm_acr"
+#   acr_name = "apunkaacr"
+#   resource_group_name = "app-dev-rg"
+#   location = "central india"
 
-}
+# }
 module "aks" {
   source = "../../Module/azurerm_aks"
+  acr_name = "apunkaacr"
   aks_name = "apunkaaks"
   location = "central india"
   resource_group_name = "app-dev-rg"
