@@ -10,8 +10,12 @@ stages:
   jobs:
     - job: terraform_plan
       steps:
-        - task: TerraformTaskV4@4
-          inputs:
+      - task: TerraformInstaller@1
+        inputs:
+          terraformVersion: 'latest'
+
+      - task: TerraformTaskV4@4
+        inputs:
             provider: 'azurerm'
             command: 'init'
             workingDirectory: '$(configuepath)'
@@ -21,8 +25,8 @@ stages:
             backendAzureRmContainerName: 'nextlevelcontainer'
             backendAzureRmKey: 'itit.tfstate'
 
-        - task: TerraformTaskV4@4
-          inputs:
+      - task: TerraformTaskV4@4
+        inputs:
             provider: 'azurerm'
             command: 'plan'
             workingDirectory: '$(configuepath)'
