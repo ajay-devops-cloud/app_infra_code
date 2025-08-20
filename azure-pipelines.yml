@@ -1,6 +1,6 @@
 trigger: none
 
-pool: apna-agent-pool
+pool: docker-agent
 variables:
   configuepath: '$(System.DefaultWorkingDirectory)/environment/dev'
 
@@ -28,40 +28,40 @@ stages:
             workingDirectory: '$(configuepath)'
             environmentServiceNameAzureRM: 'next-level-service-connection'
 
-# Stage 2: Terraform Apply with Approval
-- stage: Apply
-  dependsOn: init_and_plan
-  jobs:
-    - deployment: terraform_apply
-      environment: 'dev-terraform-apply' # UI me environment create karke approval configure karein
-      strategy:
-        runOnce:
-          deploy:
-            steps:
-              - task: TerraformTaskV4@4
-                inputs:
-                  provider: 'azurerm'
-                  command: 'apply'
-                  workingDirectory: '$(configuepath)'
-                  environmentServiceNameAzureRM: 'next-level-service-connection'
-- stage: destroy
-  jobs: 
-    - job: terraform_destroy
-      steps:
-      - task: TerraformTaskV4@4
-        inputs:
-          provider: 'azurerm'
-          command: 'init'
-          workingDirectory: '$(System.DefaultWorkingDirectory)/environment/dev'
-          backendAzureRmResourceGroupName: 'rg-it'
-          backendServiceArm: 'next-level-service-connection'
-          backendAzureRmStorageAccountName: 'itsolution'
-          backendAzureRmContainerName: 'nextlevelcontainer'
-          backendAzureRmKey: 'itit.tfstate'
+# # Stage 2: Terraform Apply with Approval
+# - stage: Apply
+#   dependsOn: init_and_plan
+#   jobs:
+#     - deployment: terraform_apply
+#       environment: 'dev-terraform-apply' # UI me environment create karke approval configure karein
+#       strategy:
+#         runOnce:
+#           deploy:
+#             steps:
+#               - task: TerraformTaskV4@4
+#                 inputs:
+#                   provider: 'azurerm'
+#                   command: 'apply'
+#                   workingDirectory: '$(configuepath)'
+#                   environmentServiceNameAzureRM: 'next-level-service-connection'
+# - stage: destroy
+#   jobs: 
+#     - job: terraform_destroy
+#       steps:
+#       - task: TerraformTaskV4@4
+#         inputs:
+#           provider: 'azurerm'
+#           command: 'init'
+#           workingDirectory: '$(System.DefaultWorkingDirectory)/environment/dev'
+#           backendAzureRmResourceGroupName: 'rg-it'
+#           backendServiceArm: 'next-level-service-connection'
+#           backendAzureRmStorageAccountName: 'itsolution'
+#           backendAzureRmContainerName: 'nextlevelcontainer'
+#           backendAzureRmKey: 'itit.tfstate'
 
-      - task: TerraformTaskV4@4
-        inputs:
-          provider: 'azurerm'
-          command: 'destroy'
-          workingDirectory: '$(System.DefaultWorkingDirectory)/environment/dev'
-          environmentServiceNameAzureRM: 'next-level-service-connection'
+#       - task: TerraformTaskV4@4
+#         inputs:
+#           provider: 'azurerm'
+#           command: 'destroy'
+#           workingDirectory: '$(System.DefaultWorkingDirectory)/environment/dev'
+#           environmentServiceNameAzureRM: 'next-level-service-connection'
