@@ -9,7 +9,7 @@ parameters:
     type: string
     values:
       - true
-        false
+      - false
 
 pool: docker-agent
 variables:
