@@ -1,4 +1,15 @@
-trigger: none
+trigger:
+  branches:
+    include:
+     - main
+     - feature/*
+parameters:
+  - name: planrequired
+    displayName: planrequired
+    type: string
+    values:
+      - true
+        false
 
 pool: docker-agent
 variables:
@@ -24,6 +35,19 @@ stages:
             backendAzureRmStorageAccountName: 'itsolution'
             backendAzureRmContainerName: 'nextlevelcontainer'
             backendAzureRmKey: 'itit.tfstate'
+- stage: manual validation
+  displayName: Manual validation
+  jobs:
+    - job:
+      displayName: Manual validation
+      pool: server
+      steps:
+      - task: ManualValidation@1
+        inputs:
+          notifyUsers: 'ajaykumaryadav97@gmail.com'
+          approvers: 'ajaykumaryadav97@gmail.com'
+          instructions: 'Approval do sir'
+          onTimeout: 'resume'
 
       - task: TerraformTaskV4@4
         inputs:
@@ -32,40 +56,23 @@ stages:
             workingDirectory: '$(configuepath)'
             environmentServiceNameAzureRM: 'next-level-service-connection'
 
-# # Stage 2: Terraform Apply with Approval
-# - stage: Apply
-#   dependsOn: init_and_plan
-#   jobs:
-#     - deployment: terraform_apply
-#       environment: 'dev-terraform-apply' # UI me environment create karke approval configure karein
-#       strategy:
-#         runOnce:
-#           deploy:
-#             steps:
-#               - task: TerraformTaskV4@4
-#                 inputs:
-#                   provider: 'azurerm'
-#                   command: 'apply'
-#                   workingDirectory: '$(configuepath)'
-#                   environmentServiceNameAzureRM: 'next-level-service-connection'
-# - stage: destroy
-#   jobs: 
-#     - job: terraform_destroy
-#       steps:
-#       - task: TerraformTaskV4@4
-#         inputs:
-#           provider: 'azurerm'
-#           command: 'init'
-#           workingDirectory: '$(System.DefaultWorkingDirectory)/environment/dev'
-#           backendAzureRmResourceGroupName: 'rg-it'
-#           backendServiceArm: 'next-level-service-connection'
-#           backendAzureRmStorageAccountName: 'itsolution'
-#           backendAzureRmContainerName: 'nextlevelcontainer'
-#           backendAzureRmKey: 'itit.tfstate'
+# Stage 2: Terraform Apply with Approval
+- stage: Apply
+  dependsOn: init_and_plan
+  condition: eq(variables['Build.SourceBranch'], 'refs/heads/main')
+  jobs:
+    - job: terraformapply
+      displayName: terraform apply
+      pool: docker-agent
+      steps:
+      - task: PowerShell@2
+        inputs:
+          targetType: 'inline'
+          script: 'echo Terraform apply runs only from main branch'
+      - task: TerraformTaskV4@4
+        inputs:
+          provider: 'azurerm'
+          command: 'apply'
+          workingDirectory: '$(configuepath)'
+          environmentServiceNameAzureRM: 'next-level-service-connection'
 
-#       - task: TerraformTaskV4@4
-#         inputs:
-#           provider: 'azurerm'
-#           command: 'destroy'
-#           workingDirectory: '$(System.DefaultWorkingDirectory)/environment/dev'
-#           environmentServiceNameAzureRM: 'next-level-service-connection'
