@@ -70,21 +70,13 @@ stages:
           publish: true
 
 # Stage 3: Manual Validation stage
-- stage: manual validation
+- stage: manual_validation
   displayName: Manual validation
   jobs:
     - job:
       displayName: Manual validation
       pool: server
       steps:
-      - task: PowerShell@2
-        inputs:
-          targetType: 'inline'
-          script: |
-            # Write your PowerShell commands here.
-      
-            Write-Host "Hello World"
-      
       - task: ManualValidation@1
         inputs:
           notifyUsers: 'ajaykumaryadav97@gmail.com'
@@ -92,7 +84,7 @@ stages:
           instructions: 'Approval do sir'
           onTimeout: 'resume'
 # Stage 4: Terraform Apply with Approval
-- stage: Apply
+- stage: deploy
   dependsOn: init_and_plan
   condition: eq(variables['Build.SourceBranch'], 'refs/heads/main')
   jobs:
