@@ -8,8 +8,8 @@ parameters:
     displayName: environment (dev/prod)
     type: string
     values:
-      - true
-      - false
+      - dev
+      - prod
 
 pool: Apna-agent-pool
 variables:
@@ -53,21 +53,13 @@ stages:
   jobs:
     - job:
       displayName: scanning wala job
-      pool: server
       steps:
-      - task: PowerShell@2
-        inputs:
-          targetType: 'inline'
-          script: |
-            # Write your PowerShell commands here.
-            
-            Write-Host "Hello World"
 
       - task: trivy@2
         inputs:
           version: 'latest'
           type: 'filesystem'
-          target: 'configuepath'
+          target: '$(configuepath)'
           publish: true
 
 # Stage 3: Manual Validation stage
