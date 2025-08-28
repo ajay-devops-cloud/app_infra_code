@@ -4,8 +4,8 @@ trigger:
      - main
      - feature/*
 parameters:
-  - name: planrequired
-    displayName: planrequired
+  - name: environment
+    displayName: environment (dev/prod)
     type: string
     values:
       - true
@@ -13,7 +13,7 @@ parameters:
 
 pool: docker-agent
 variables:
-  configuepath: '$(System.DefaultWorkingDirectory)/environment/dev'
+  configuepath: '$(System.DefaultWorkingDirectory)/environment/${{parameters.environment}}'
 
 stages:
 # Stage 1: Terraform Init & Plan
@@ -35,6 +35,27 @@ stages:
             backendAzureRmStorageAccountName: 'itsolution'
             backendAzureRmContainerName: 'nextlevelcontainer'
             backendAzureRmKey: 'itit.tfstate'
+      - task: TerraformTask@5
+        inputs:
+          provider: 'azurerm'
+          command: 'plan'
+          workingDirectory: '$(configuepath)'
+          environmentServiceNameAzureRM: 'next-level-service-connection'
+- stage: Scanning
+  displayName: security scanning
+  jobs:
+    - job:
+      displayName: scanning wala job
+      pool: server
+      steps:
+      - task: PowerShell@2
+        inputs:
+          targetType: 'inline'
+          script: |
+            # Write your PowerShell commands here.
+            
+            Write-Host "Hello World"
+      
 - stage: manual validation
   displayName: Manual validation
   jobs:
