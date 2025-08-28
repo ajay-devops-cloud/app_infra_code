@@ -8,12 +8,12 @@ parameters:
     displayName: environment (dev/prod)
     type: string
     values:
-      - true
-      - false
+      - dev
+      - prod
 
-pool: docker-agent
+pool: Apna-agent-pool
 variables:
-  configuepath: '$(System.DefaultWorkingDirectory)/environment/${{parameters.environment}}'
+  configpath: '$(System.DefaultWorkingDirectory)/environment/${{parameters.environment}}'
 
 stages:
 # Stage 1: Terraform Init & Plan
@@ -35,7 +35,7 @@ stages:
         inputs:
             provider: 'azurerm'
             command: 'init'
-            workingDirectory: '$(configuepath)'
+            workingDirectory: '$(configpath)'
             backendAzureRmResourceGroupName: 'rg-it'
             backendServiceArm: 'next-level-service-connection'
             backendAzureRmStorageAccountName: 'itsolution1'
@@ -45,7 +45,7 @@ stages:
         inputs:
           provider: 'azurerm'
           command: 'plan'
-          workingDirectory: '$(configuepath)'
+          workingDirectory: '$(configpath)'
           environmentServiceNameAzureRM: 'next-level-service-connection'
 # Stage 2: Scanning 
 - stage: Scanning
@@ -53,7 +53,6 @@ stages:
   jobs:
     - job:
       displayName: scanning wala job
-      pool: server
       steps:
       - task: PowerShell@2
         inputs:
@@ -62,30 +61,21 @@ stages:
             # Write your PowerShell commands here.
             
             Write-Host "Hello World"
-
       - task: trivy@2
         inputs:
           version: 'latest'
           type: 'filesystem'
-          target: 'configuepath'
+          target: '$(configpath)'
           publish: true
 
 # Stage 3: Manual Validation stage
-- stage: manual validation
+- stage: manual_validation
   displayName: Manual validation
   jobs:
     - job:
       displayName: Manual validation
       pool: server
       steps:
-      - task: PowerShell@2
-        inputs:
-          targetType: 'inline'
-          script: |
-            # Write your PowerShell commands here.
-      
-            Write-Host "Hello World"
-      
       - task: ManualValidation@1
         inputs:
           notifyUsers: 'ajaykumaryadav97@gmail.com'
@@ -94,13 +84,13 @@ stages:
           onTimeout: 'resume'
 
 # Stage 4: Terraform Apply with Approval
-- stage: Apply
-  dependsOn: init_and_plan
+- stage: deploy
+  dependsOn: manual_validation
   condition: eq(variables['Build.SourceBranch'], 'refs/heads/main')
   jobs:
     - job: terraformapply
       displayName: terraform apply
-      pool: docker-agent
+      pool: Apna-agent-pool
       steps:
       - task: PowerShell@2
         inputs:
@@ -110,7 +100,7 @@ stages:
         inputs:
           provider: 'azurerm'
           command: 'init'
-          workingDirectory: 'configuepath'
+          workingDirectory: '$(configpath)'
           backendAzureRmResourceGroupName: 'rg-it'
           backendServiceArm: 'next-level-service-connection'
           backendAzureRmStorageAccountName: 'itsolution1'
@@ -120,6 +110,6 @@ stages:
         inputs:
           provider: 'azurerm'
           command: 'apply'
-          workingDirectory: '$(configuepath)'
+          workingDirectory: '$(configpath)'
           environmentServiceNameAzureRM: 'next-level-service-connection'
 
