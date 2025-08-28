@@ -53,7 +53,7 @@ stages:
   jobs:
     - job:
       displayName: scanning wala job
-      pool: Apna-agent-pool
+      pool: server
       steps:
       - task: PowerShell@2
         inputs:
