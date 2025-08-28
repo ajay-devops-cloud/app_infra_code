@@ -13,7 +13,8 @@ parameters:
 
 pool: Apna-agent-pool
 variables:
-  configpath: '$(System.DefaultWorkingDirectory)/environment/${{parameters.environment}}'
+  SYSTEM_DEFAULT_WORKDIR: '/azp/_work/1/s'
+  CONFIG_PATH: '/azp/_work/1/s/environment/${{ parameters.environment }}'
 stages:
 # Stage 1: Terraform Init & Plan
 - stage: init_and_plan
@@ -30,20 +31,20 @@ stages:
         inputs:
             provider: 'azurerm'
             command: 'init'
-            workingDirectory: '$(configpath)'
+            workingDirectory: '$(CONFIG_PATH)'
             backendAzureRmResourceGroupName: 'rg-it'
             backendServiceArm: 'next-level-service-connection'
             backendAzureRmStorageAccountName: 'itsolution1'
             backendAzureRmContainerName: 'nextlevelcontainer'
             backendAzureRmKey: '${{ parameters.environment }}.itit.tfstate'
-            useInstalledTerraform: true
+            
       - task: TerraformTask@5
         inputs:
           provider: 'azurerm'
           command: 'plan'
-          workingDirectory: '$(configpath)'
+          workingDirectory: '$(CONFIG_PATH)'
           environmentServiceNameAzureRM: 'next-level-service-connection'
-          useInstalledTerraform: true
+          
 # Stage 2: Scanning 
 - stage: Scanning
   displayName: security scanning
@@ -55,7 +56,7 @@ stages:
         inputs:
           version: 'latest'
           type: 'filesystem'
-          target: '$(configpath)'
+          target: '$(CONFIG_PATH)'
           publish: true
 
 # Stage 3: Manual Validation stage
@@ -86,17 +87,17 @@ stages:
         inputs:
           provider: 'azurerm'
           command: 'init'
-          workingDirectory: '$(configpath)'
+          workingDirectory: '$(CONFIG_PATH)'
           backendAzureRmResourceGroupName: 'rg-it'
           backendServiceArm: 'next-level-service-connection'
           backendAzureRmStorageAccountName: 'itsolution1'
           backendAzureRmContainerName: 'nextlevelcontainer'
           backendAzureRmKey: '${{ parameters.environment }}.itit.tfstate'
-          useInstalledTerraform: true
+          
       - task: TerraformTaskV4@4
         inputs:
           provider: 'azurerm'
           command: 'apply'
-          workingDirectory: '$(configpath)'
+          workingDirectory: '$(CONFIG_PATH)'
           environmentServiceNameAzureRM: 'next-level-service-connection'
 
