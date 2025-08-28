@@ -63,7 +63,7 @@ stages:
           publish: true
 
 # Stage 3: Manual Validation stage
-- stage: manual validation
+- stage: manual_validation
   displayName: Manual validation
   jobs:
     - job:
