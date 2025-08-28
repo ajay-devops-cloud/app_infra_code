@@ -14,9 +14,6 @@ parameters:
 pool: Apna-agent-pool
 variables:
   configpath: '$(System.DefaultWorkingDirectory)/environment/${{parameters.environment}}'
-  # TERRAFORM_PATH: '/azp/_work/_tool/terraform/1.13.1/x64/terraform'
-  # PATH: '/azp/_work/_tool/terraform/1.13.1/x64:$(PATH)'
-
 stages:
 # Stage 1: Terraform Init & Plan
 - stage: init_and_plan
@@ -39,12 +36,14 @@ stages:
             backendAzureRmStorageAccountName: 'itsolution1'
             backendAzureRmContainerName: 'nextlevelcontainer'
             backendAzureRmKey: '${{ parameters.environment }}.itit.tfstate'
+            useInstalledTerraform: true
       - task: TerraformTask@5
         inputs:
           provider: 'azurerm'
           command: 'plan'
           workingDirectory: '$(configpath)'
           environmentServiceNameAzureRM: 'next-level-service-connection'
+          useInstalledTerraform: true
 # Stage 2: Scanning 
 - stage: Scanning
   displayName: security scanning
@@ -93,6 +92,7 @@ stages:
           backendAzureRmStorageAccountName: 'itsolution1'
           backendAzureRmContainerName: 'nextlevelcontainer'
           backendAzureRmKey: '${{ parameters.environment }}.itit.tfstate'
+          useInstalledTerraform: true
       - task: TerraformTaskV4@4
         inputs:
           provider: 'azurerm'
