@@ -5,11 +5,11 @@ trigger:
      - feature/*
 parameters:
   - name: environment
-    displayName: environment (dev/prod)
+    displayName: environment(dev/prod)
     type: string
     values:
-      - true
-      - false
+      - dev
+      - prod
 
 pool: docker-agent
 variables:
@@ -62,12 +62,11 @@ stages:
             # Write your PowerShell commands here.
             
             Write-Host "Hello World"
-
       - task: trivy@2
         inputs:
           version: 'latest'
           type: 'filesystem'
-          target: 'configuepath'
+          target: '$(configuepath)'
           publish: true
 
 # Stage 3: Manual Validation stage
@@ -92,7 +91,6 @@ stages:
           approvers: 'ajaykumaryadav97@gmail.com'
           instructions: 'Approval do sir'
           onTimeout: 'resume'
-
 # Stage 4: Terraform Apply with Approval
 - stage: Apply
   dependsOn: init_and_plan
@@ -110,7 +108,7 @@ stages:
         inputs:
           provider: 'azurerm'
           command: 'init'
-          workingDirectory: 'configuepath'
+          workingDirectory: '$(configuepath)'
           backendAzureRmResourceGroupName: 'rg-it'
           backendServiceArm: 'next-level-service-connection'
           backendAzureRmStorageAccountName: 'itsolution1'
