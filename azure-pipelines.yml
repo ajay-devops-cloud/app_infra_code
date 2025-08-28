@@ -14,8 +14,8 @@ parameters:
 pool: Apna-agent-pool
 variables:
   configpath: '$(System.DefaultWorkingDirectory)/environment/${{parameters.environment}}'
-  TERRAFORM_PATH: '/azp/_work/_tool/terraform/1.13.1/x64/terraform'
-  PATH: '/azp/_work/_tool/terraform/1.13.1/x64:$(PATH)'
+  # TERRAFORM_PATH: '/azp/_work/_tool/terraform/1.13.1/x64/terraform'
+  # PATH: '/azp/_work/_tool/terraform/1.13.1/x64:$(PATH)'
 
 stages:
 # Stage 1: Terraform Init & Plan
