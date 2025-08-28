@@ -11,7 +11,7 @@ parameters:
       - true
       - false
 
-pool: docker-agent
+pool: Apna-agent-pool
 variables:
   configuepath: '$(System.DefaultWorkingDirectory)/environment/${{parameters.environment}}'
 
@@ -53,7 +53,7 @@ stages:
   jobs:
     - job:
       displayName: scanning wala job
-      pool: server
+      pool: Apna-agent-pool
       steps:
       - task: PowerShell@2
         inputs:
@@ -100,7 +100,7 @@ stages:
   jobs:
     - job: terraformapply
       displayName: terraform apply
-      pool: docker-agent
+      pool: Apna-agent-pool
       steps:
       - task: PowerShell@2
         inputs:
