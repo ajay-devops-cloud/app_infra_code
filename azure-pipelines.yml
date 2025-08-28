@@ -24,13 +24,6 @@ stages:
       - task: TerraformInstaller@1
         inputs:
           terraformVersion: 'latest'
-      - task: PowerShell@2
-        inputs:
-          targetType: 'inline'
-          script: |
-            # Write your PowerShell commands here.
-            
-            Write-Host "Hello World"
       - task: TerraformTaskV4@4
         inputs:
             provider: 'azurerm'
@@ -54,13 +47,6 @@ stages:
     - job:
       displayName: scanning wala job
       steps:
-      - task: PowerShell@2
-        inputs:
-          targetType: 'inline'
-          script: |
-            # Write your PowerShell commands here.
-            
-            Write-Host "Hello World"
       - task: trivy@2
         inputs:
           version: 'latest'
@@ -92,10 +78,6 @@ stages:
       displayName: terraform apply
       pool: Apna-agent-pool
       steps:
-      - task: PowerShell@2
-        inputs:
-          targetType: 'inline'
-          script: 'echo Terraform apply runs only from main branch'
       - task: TerraformTask@5
         inputs:
           provider: 'azurerm'
