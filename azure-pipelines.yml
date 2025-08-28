@@ -70,14 +70,6 @@ stages:
       displayName: Manual validation
       pool: server
       steps:
-      - task: PowerShell@2
-        inputs:
-          targetType: 'inline'
-          script: |
-            # Write your PowerShell commands here.
-      
-            Write-Host "Hello World"
-      
       - task: ManualValidation@1
         inputs:
           notifyUsers: 'ajaykumaryadav97@gmail.com'
