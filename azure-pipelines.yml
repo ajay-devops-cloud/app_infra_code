@@ -27,8 +27,8 @@ stages:
         inputs:
           terraformVersion: 'latest'
       - script: |
-         echo "##vso[task.prependpath]$AGENT_TOOLSDIRECTORY/terraform/$(terraformVersion)/x64"
-        displayName: 'Set Terraform PATH'
+          echo "##vso[task.prependpath]/azp/_work/_tool/terraform/1.13.1/x64"
+        displayName: 'Add Terraform to PATH'
       - task: TerraformTaskV4@4
         inputs:
             provider: 'azurerm'
