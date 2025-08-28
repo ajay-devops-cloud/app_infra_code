@@ -42,14 +42,14 @@ module "subnet" {
 #     sku       = "22_04-lts"
 #     image_version = "latest"
 # }
-module "bd" {
-    depends_on = [ module.rg ]
-  source = "../../Module/azurerm_DB"
-  sql_server_name = "mysql-ajay-01"
-  resource_group_name = "app-dev-rg"
-  location = "central india"
-  sql_database_name = "mydb"
-}
+# module "bd" {
+#     depends_on = [ module.rg ]
+#   source = "../../Module/azurerm_DB"
+#   sql_server_name = "mysql-ajay-01"
+#   resource_group_name = "app-dev-rg"
+#   location = "central india"
+#   sql_database_name = "mydb"
+# }
 # module "acr" {
 #   source = "../../Module/azurerm_acr"
 #   acr_name = "apunkaacr"
@@ -57,11 +57,11 @@ module "bd" {
 #   location = "central india"
 
 # }
-module "aks" {
-  source = "../../Module/azurerm_aks"
-  acr_name = "apunkaacr"
-  aks_name = "apunkaaks"
-  location = "central india"
-  resource_group_name = "app-dev-rg"
+# module "aks" {
+#   source = "../../Module/azurerm_aks"
+#   acr_name = "apunkaacr"
+#   aks_name = "apunkaaks"
+#   location = "central india"
+#   resource_group_name = "app-dev-rg"
   
-}
+# }
