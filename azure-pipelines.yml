@@ -13,7 +13,7 @@ stages:
         inputs:
           provider: 'azurerm'
           command: 'init'
-          workingDirectory: '$(System.DefaultWorkingDirectory)/environment/dev'
+          workingDirectory: '$(System.DefaultWorkingDirectory)/Environment/Dev'
           terraformPath: '/usr/local/bin/terraform'
           backendServiceArm: 'next-level-service-connection'
           backendAzureRmStorageAccountName: 'itsolution'
@@ -23,7 +23,7 @@ stages:
         inputs:
           provider: 'azurerm'
           command: 'plan'
-          workingDirectory: '$(System.DefaultWorkingDirectory)/environment/dev'
+          workingDirectory: '$(System.DefaultWorkingDirectory)/Environment/Dev'
           terraformPath: '/usr/local/bin/terraform'
           environmentServiceNameAzureRM: 'next-level-service-connection'
           
@@ -38,7 +38,7 @@ stages:
         inputs:
           version: 'latest'
           type: 'filesystem'
-          target: '$(System.DefaultWorkingDirectory)/environment/dev'
+          target: '$(System.DefaultWorkingDirectory)/Environment/Dev'
           publish: true
 
 # Stage 3: Manual Validation stage
@@ -69,7 +69,7 @@ stages:
         inputs:
           provider: 'azurerm'
           command: 'init'
-          workingDirectory: '$(System.DefaultWorkingDirectory)/environment/dev'
+          workingDirectory: '$(System.DefaultWorkingDirectory)/Environment/Dev'
           terraformPath: '/usr/local/bin/terraform'
           backendAzureRmResourceGroupName: 'rg-it'
           backendServiceArm: 'next-level-service-connection'
@@ -81,7 +81,7 @@ stages:
         inputs:
           provider: 'azurerm'
           command: 'apply'
-          workingDirectory: '$(System.DefaultWorkingDirectory)/environment/dev'
+          workingDirectory: '$(System.DefaultWorkingDirectory)/Environment/Dev'
           terraformPath: '/usr/local/bin/terraform'
           environmentServiceNameAzureRM: 'next-level-service-connection'
 
