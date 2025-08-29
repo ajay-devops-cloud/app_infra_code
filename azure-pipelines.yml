@@ -1,8 +1,6 @@
-trigger:
-  branches:
-    include:
-     - main
-     - feature/*
+trigger: none
+
+
 parameters:
   - name: environment
     displayName: environment (dev/prod)
