@@ -77,7 +77,7 @@ stages:
           backendAzureRmContainerName: 'nextlevelcontainer'
           backendAzureRmKey: 'itit.tfstate'
           
-      - task: TerraformTaskV4@4
+      - task: TerraformTask@5
         inputs:
           provider: 'azurerm'
           command: 'apply'
