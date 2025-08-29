@@ -14,6 +14,7 @@ stages:
           provider: 'azurerm'
           command: 'init'
           workingDirectory: '$(System.DefaultWorkingDirectory)/environment/dev'
+          terraformPath: '/usr/local/bin/terraform'
           backendServiceArm: 'next-level-service-connection'
           backendAzureRmStorageAccountName: 'itsolution'
           backendAzureRmContainerName: 'nextlevelcontainer'
@@ -23,6 +24,7 @@ stages:
           provider: 'azurerm'
           command: 'plan'
           workingDirectory: '$(System.DefaultWorkingDirectory)/environment/dev'
+          terraformPath: '/usr/local/bin/terraform'
           environmentServiceNameAzureRM: 'next-level-service-connection'
           
 # Stage 2: Scanning 
@@ -68,6 +70,7 @@ stages:
           provider: 'azurerm'
           command: 'init'
           workingDirectory: '$(System.DefaultWorkingDirectory)/environment/dev'
+          terraformPath: '/usr/local/bin/terraform'
           backendAzureRmResourceGroupName: 'rg-it'
           backendServiceArm: 'next-level-service-connection'
           backendAzureRmStorageAccountName: 'itsolution1'
@@ -79,5 +82,6 @@ stages:
           provider: 'azurerm'
           command: 'apply'
           workingDirectory: '$(System.DefaultWorkingDirectory)/environment/dev'
+          terraformPath: '/usr/local/bin/terraform'
           environmentServiceNameAzureRM: 'next-level-service-connection'
 
