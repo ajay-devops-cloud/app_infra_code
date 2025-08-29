@@ -1,18 +1,8 @@
 trigger: none
 
 
-parameters:
-  - name: environment
-    displayName: environment (dev/prod)
-    type: string
-    values:
-      - dev
-      - prod
-
 pool: Apna-agent-pool
-variables:
-  SYSTEM_DEFAULT_WORKDIR: '/azp/_work/1/s'
-  CONFIG_PATH: '/azp/_work/1/s/environment/${{ parameters.environment }}'
+
 stages:
 # Stage 1: Terraform Init & Plan
 - stage: init_and_plan
@@ -22,25 +12,20 @@ stages:
       - task: TerraformInstaller@1
         inputs:
           terraformVersion: 'latest'
-      - script: |
-          echo "##vso[task.prependpath]/azp/_work/_tool/terraform/1.13.1/x64"
-        displayName: 'Add Terraform to PATH'
-      - task: TerraformTaskV4@4
+      - task: TerraformTask@5
         inputs:
-            provider: 'azurerm'
-            command: 'init'
-            workingDirectory: '$(CONFIG_PATH)'
-            backendAzureRmResourceGroupName: 'rg-it'
-            backendServiceArm: 'next-level-service-connection'
-            backendAzureRmStorageAccountName: 'itsolution1'
-            backendAzureRmContainerName: 'nextlevelcontainer'
-            backendAzureRmKey: '${{ parameters.environment }}.itit.tfstate'
-            
+          provider: 'azurerm'
+          command: 'init'
+          workingDirectory: '$(System.DefaultWorkingDirectory)/environment/dev'
+          backendServiceArm: 'next-level-service-connection'
+          backendAzureRmStorageAccountName: 'itsolution'
+          backendAzureRmContainerName: 'nextlevelcontainer'
+          backendAzureRmKey: 'itit.tfstate'
       - task: TerraformTask@5
         inputs:
           provider: 'azurerm'
           command: 'plan'
-          workingDirectory: '$(CONFIG_PATH)'
+          workingDirectory: '$(System.DefaultWorkingDirectory)/environment/dev'
           environmentServiceNameAzureRM: 'next-level-service-connection'
           
 # Stage 2: Scanning 
@@ -54,7 +39,7 @@ stages:
         inputs:
           version: 'latest'
           type: 'filesystem'
-          target: '$(CONFIG_PATH)'
+          target: '$(System.DefaultWorkingDirectory)/environment/dev'
           publish: true
 
 # Stage 3: Manual Validation stage
@@ -85,17 +70,17 @@ stages:
         inputs:
           provider: 'azurerm'
           command: 'init'
-          workingDirectory: '$(CONFIG_PATH)'
+          workingDirectory: '$(System.DefaultWorkingDirectory)/environment/dev'
           backendAzureRmResourceGroupName: 'rg-it'
           backendServiceArm: 'next-level-service-connection'
           backendAzureRmStorageAccountName: 'itsolution1'
           backendAzureRmContainerName: 'nextlevelcontainer'
-          backendAzureRmKey: '${{ parameters.environment }}.itit.tfstate'
+          backendAzureRmKey: 'itit.tfstate'
           
       - task: TerraformTaskV4@4
         inputs:
           provider: 'azurerm'
           command: 'apply'
-          workingDirectory: '$(CONFIG_PATH)'
+          workingDirectory: '$(System.DefaultWorkingDirectory)/environment/dev'
           environmentServiceNameAzureRM: 'next-level-service-connection'
 
