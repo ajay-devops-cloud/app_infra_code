@@ -14,7 +14,7 @@ stages:
           provider: 'azurerm'
           command: 'init'
           workingDirectory: '$(System.DefaultWorkingDirectory)/Environment/Dev'
-          backendAzureRmUseEntraIdForAuthentication: false
+          # backendAzureRmUseEntraIdForAuthentication: false
           backendServiceArm: 'next-level-service-connection'
           backendAzureRmResourceGroupName: 'rg-it'
           backendAzureRmStorageAccountName: 'itsolution1'
