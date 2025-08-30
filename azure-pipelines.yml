@@ -16,6 +16,7 @@ stages:
           workingDirectory: '$(System.DefaultWorkingDirectory)/Environment/Dev'
           backendAzureRmUseEntraIdForAuthentication: false
           backendServiceArm: 'next-level-service-connection'
+          backendAzureRmResourceGroupName: 'rg-it'
           backendAzureRmStorageAccountName: 'itsolution'
           backendAzureRmContainerName: 'nextlevelcontainer'
           backendAzureRmKey: 'terraform.tfstate'
