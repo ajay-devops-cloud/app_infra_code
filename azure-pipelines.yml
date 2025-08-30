@@ -17,7 +17,7 @@ stages:
           backendAzureRmUseEntraIdForAuthentication: false
           backendServiceArm: 'next-level-service-connection'
           backendAzureRmResourceGroupName: 'rg-it'
-          backendAzureRmStorageAccountName: 'itsolution'
+          backendAzureRmStorageAccountName: 'itsolution1'
           backendAzureRmContainerName: 'nextlevelcontainer'
           backendAzureRmKey: 'terraform.tfstate'
           environmentServiceNameAzureRM: 'next-level-service-connection'
