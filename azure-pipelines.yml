@@ -28,61 +28,61 @@ stages:
           terraformPath: '/usr/local/bin/terraform'
           environmentServiceNameAzureRM: 'next-level-service-connection'
           
-# Stage 2: Scanning 
-- stage: Scanning
-  displayName: security scanning
-  jobs:
-    - job:
-      displayName: scanning wala job
-      steps:
-      - task: trivy@2
-        inputs:
-          version: 'latest'
-          type: 'filesystem'
-          target: '$(System.DefaultWorkingDirectory)/Environment/Dev'
-          publish: true
+# # Stage 2: Scanning 
+# - stage: Scanning
+#   displayName: security scanning
+#   jobs:
+#     - job:
+#       displayName: scanning wala job
+#       steps:
+#       - task: trivy@2
+#         inputs:
+#           version: 'latest'
+#           type: 'filesystem'
+#           target: '$(System.DefaultWorkingDirectory)/Environment/Dev'
+#           publish: true
 
-# Stage 3: Manual Validation stage
-- stage: manual_validation
-  displayName: Manual validation
-  jobs:
-    - job:
-      displayName: Manual validation
-      pool: server
-      steps:
-      - task: ManualValidation@1
-        inputs:
-          notifyUsers: 'ajaykumaryadav97@gmail.com'
-          approvers: 'ajaykumaryadav97@gmail.com'
-          instructions: 'Approval do sir'
-          onTimeout: 'resume'
+# # Stage 3: Manual Validation stage
+# - stage: manual_validation
+#   displayName: Manual validation
+#   jobs:
+#     - job:
+#       displayName: Manual validation
+#       pool: server
+#       steps:
+#       - task: ManualValidation@1
+#         inputs:
+#           notifyUsers: 'ajaykumaryadav97@gmail.com'
+#           approvers: 'ajaykumaryadav97@gmail.com'
+#           instructions: 'Approval do sir'
+#           onTimeout: 'resume'
 
-# Stage 4: Terraform Apply with Approval
-- stage: deploy
-  dependsOn: manual_validation
-  condition: eq(variables['Build.SourceBranch'], 'refs/heads/main')
-  jobs:
-    - job: terraformapply
-      displayName: terraform apply
-      pool: Apna-agent-pool
-      steps:
-      - task: TerraformTask@5
-        inputs:
-          provider: 'azurerm'
-          command: 'init'
-          workingDirectory: '$(System.DefaultWorkingDirectory)/Environment/Dev'
-          terraformPath: '/usr/local/bin/terraform'
-          backendAzureRmResourceGroupName: 'rg-it'
-          backendServiceArm: 'next-level-service-connection'
-          backendAzureRmStorageAccountName: 'itsolution1'
-          backendAzureRmContainerName: 'nextlevelcontainer'
-          backendAzureRmKey: 'itit.tfstate'
+# # Stage 4: Terraform Apply with Approval
+# - stage: deploy
+#   dependsOn: manual_validation
+#   condition: eq(variables['Build.SourceBranch'], 'refs/heads/main')
+#   jobs:
+#     - job: terraformapply
+#       displayName: terraform apply
+#       pool: Apna-agent-pool
+#       steps:
+#       - task: TerraformTask@5
+#         inputs:
+#           provider: 'azurerm'
+#           command: 'init'
+#           workingDirectory: '$(System.DefaultWorkingDirectory)/Environment/Dev'
+#           terraformPath: '/usr/local/bin/terraform'
+#           backendAzureRmResourceGroupName: 'rg-it'
+#           backendServiceArm: 'next-level-service-connection'
+#           backendAzureRmStorageAccountName: 'itsolution1'
+#           backendAzureRmContainerName: 'nextlevelcontainer'
+#           backendAzureRmKey: 'itit.tfstate'
           
-      - task: TerraformTask@5
-        inputs:
-          provider: 'azurerm'
-          command: 'apply'
-          workingDirectory: '$(System.DefaultWorkingDirectory)/Environment/Dev'
-          terraformPath: '/usr/local/bin/terraform'
-          environmentServiceNameAzureRM: 'next-level-service-connection'
+#       - task: TerraformTask@5
+#         inputs:
+#           provider: 'azurerm'
+#           command: 'apply'
+#           workingDirectory: '$(System.DefaultWorkingDirectory)/Environment/Dev'
+#           terraformPath: '/usr/local/bin/terraform'
+#           environmentServiceNameAzureRM: 'next-level-service-connection'
 
