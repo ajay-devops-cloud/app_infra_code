@@ -15,12 +15,12 @@ stages:
           command: 'init'
           workingDirectory: '$(System.DefaultWorkingDirectory)/Environment/Dev'
           backendServiceArm: 'next-level-service-connection'
-          backendAzureRmResourceGroupName: 'rg-it'
           backendAzureRmStorageAccountName: 'itsolution'
           backendAzureRmContainerName: 'nextlevelcontainer'
           backendAzureRmKey: 'terraform.tfstate'
           environmentServiceNameAzureRM: 'next-level-service-connection'
-          useServicePrincipal: true 
+          useServicePrincipal: true
+
       - task: TerraformTask@5
         inputs:
           provider: 'azurerm'
