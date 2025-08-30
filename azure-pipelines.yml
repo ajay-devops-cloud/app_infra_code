@@ -21,14 +21,14 @@ stages:
           backendAzureRmContainerName: 'nextlevelcontainer'
           backendAzureRmKey: 'terraform.tfstate'
           environmentServiceNameAzureRM: 'next-level-service-connection'
-          useServicePrincipal: true
+          
       - task: TerraformTask@5
         inputs:
           provider: 'azurerm'
           command: 'plan'
           workingDirectory: '$(System.DefaultWorkingDirectory)/Environment/Dev'
           environmentServiceNameAzureRM: 'next-level-service-connection'
-          useServicePrincipal: true
+          
           
 # # Stage 2: Scanning 
 # - stage: Scanning
