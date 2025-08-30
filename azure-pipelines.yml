@@ -13,14 +13,12 @@ stages:
         inputs:
           provider: 'azurerm'
           command: 'init'
-          workingDirectory: '$(System.DefaultWorkingDirectory)/Environment/Dev'
-          # backendAzureRmUseEntraIdForAuthentication: false
+          workingDirectory: '$(System.DefaultWorkingDirectory)/Environment/dev'
           backendServiceArm: 'next-level-service-connection'
           backendAzureRmResourceGroupName: 'rg-it'
           backendAzureRmStorageAccountName: 'itsolution1'
           backendAzureRmContainerName: 'nextlevelcontainer'
-          backendAzureRmKey: 'terraform.tfstate'
-          environmentServiceNameAzureRM: 'next-level-service-connection'
+          backendAzureRmKey: 'terraform.tfstate''
           
       - task: TerraformTask@5
         inputs:
@@ -29,7 +27,9 @@ stages:
           workingDirectory: '$(System.DefaultWorkingDirectory)/Environment/Dev'
           environmentServiceNameAzureRM: 'next-level-service-connection'
           
-          
+
+
+
 # # Stage 2: Scanning 
 # - stage: Scanning
 #   displayName: security scanning
