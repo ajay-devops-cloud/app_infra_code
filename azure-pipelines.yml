@@ -18,8 +18,7 @@ stages:
           backendAzureRmResourceGroupName: 'rg-it'
           backendAzureRmStorageAccountName: 'itsolution1'
           backendAzureRmContainerName: 'nextlevelcontainer'
-          backendAzureRmKey: 'terraform.tfstate''
-          
+          backendAzureRmKey: 'terraform.tfstate'
       - task: TerraformTask@5
         inputs:
           provider: 'azurerm'
